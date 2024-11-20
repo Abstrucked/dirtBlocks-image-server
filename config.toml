@@ -1,0 +1,5 @@
+# config.toml
+
+# Volume Configuration
+[volume]
+path = "data"

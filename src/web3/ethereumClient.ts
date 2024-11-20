@@ -11,6 +11,7 @@ declare interface IEthereumClient {
 class EthereumClient implements IEthereumClient {
   provider: ethers.JsonRpcProvider = null;
   contract: ethers.Contract = null;
+
   constructor() {
     this.provider = new ethers.JsonRpcProvider(
       hychain.rpcUrl,
@@ -22,8 +23,15 @@ class EthereumClient implements IEthereumClient {
     this.contract = new ethers.Contract(process.env.CONTRACT_ADDRESS, abi, this.provider);
   }
 
-  async name(): Promise<String> {
+  async name(): Promise<string> {
     return await this.contract.name();
+  }
+  async totalSupply(): Promise<number> {
+    return await this.contract.totalSupply()
+  }
+
+  async tokenJSON(tokenId: number): Promise<string> {
+    return await this.contract.tokenJSON(tokenId)
   }
 }
 
