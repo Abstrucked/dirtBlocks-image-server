@@ -7,12 +7,15 @@
   "scripts": {
     "dev": "nodemon src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "save-collection": "node dist/save-collection.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.1",
-    "express": "^4.18.2"
+    "ethers": "^6.13.4",
+    "express": "^4.21.1",
+    "toml": "^3.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

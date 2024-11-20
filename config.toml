@@ -1,0 +1,8 @@
+# config.toml
+
+# Volume Configuration
+[volume]
+path = "data"
+
+[web3]
+contractAddress = "0xca460bB37736BF74b24eb72aa5a38adf96Cd345a"
