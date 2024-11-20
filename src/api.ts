@@ -42,20 +42,20 @@ api.get('/item/:tokenId', async (req, res) => {
     res.status(404).send({ error: "Item not found" });
     return;
   }
-  res.status(200).send({ item }); // Assuming you meant to send the item not collection
+  res.status(200).send({ item });
 })
 
 api.get('/item/image/:tokenId', async (req, res) => {
-  const path = await basePath(eth); // Assuming basePath is a function that provides the path
+  const path = await basePath(eth);
   const tokenId = req.params.tokenId;
-  const item = getItem(path, tokenId); // Assuming getItem retrieves the item based on path and tokenId
+  const item = getItem(path, tokenId);
 
   if (!item || !item.image) {
     res.status(404).send({ error: "Image not found" });
     return;
   }
 
-  const base64Image = item.image; // Assuming item.image is a base64 encoded string of the image
+  const base64Image = item.image;
 
   // Extract the base64 data and the MIME type
   const matches = base64Image.match(/^data:(.*);base64,(.*)$/);
@@ -77,16 +77,16 @@ api.get('/item/image/:tokenId', async (req, res) => {
 });
 
 api.get('/item/animation/:tokenId', async (req, res) => {
-  const path = await basePath(eth); // Assuming basePath is a function that provides the path
+  const path = await basePath(eth);
   const tokenId = req.params.tokenId;
-  const item = getItem(path, tokenId); // Assuming getItem retrieves the item based on path and tokenId
+  const item = getItem(path, tokenId);
 
   if (!item || !item.animation_url) {
     res.status(404).send({ error: "Animation not found" });
     return;
   }
 
-  const base64Html = item.animation_url; // Assuming item.animation_url is a base64 encoded string of the HTML
+  const base64Html = item.animation_url;
 
   // Extract the base64 data from the data URL scheme
   const matches = base64Html.match(/^data:text\/html;base64,(.*)$/);

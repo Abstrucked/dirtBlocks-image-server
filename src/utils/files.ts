@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, unlink, existsSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, unlink, existsSync, mkdirSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import config from './config';
 import EthereumClient from '../web3/ethereumClient';
@@ -17,6 +17,14 @@ export const createDir = (path: string | string[]) => {
     `Creating directory: ${path}`
   );
   mkdirSync(fullPath, { recursive: true });
+};
+
+export const fileList = (_path: string): string[] => {
+  const fullPath = Array.isArray(_path) ? path.join('/') : _path;
+
+  if (!existsSync(fullPath)) throw new Error(
+    `Directory does not exist: ${fullPath}`);
+  return readdirSync(fullPath)
 };
 
 export const saveItem = (path: string, data: string) => {
