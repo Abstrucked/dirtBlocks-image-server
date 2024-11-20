@@ -2,17 +2,13 @@ import express from 'express';
 import cors from 'cors';
 import EthereumClient from './web3/ethereumClient';
 import fetchCollection from './utils/fetchCollection';
-import { createDir, getItem, saveItem } from './utils/files';
-import config from './utils/config';
+import { createDir, getItem, basePath } from './utils/files';
 
 const eth = new EthereumClient();
 
 export const app = express();
 
-const basePath = async (): Promise<string> => {
-  const name = await eth.name()
-  return [config.volume.path, name].join('/');
-};
+
 
 app.use(cors({ origin: true }));
 
@@ -38,14 +34,19 @@ api.get('/collection', async (req, res) => {
 });
 
 api.get('/item/:tokenId', async (req, res) => {
-  const path = await basePath()
-  const tokenId = req.params.tokenId;
-  const item = getItem(path, tokenId); // Pass the tokenId to getItem or use as needed
+  const path: string = await basePath(eth)
+  const tokenId: string = req.params.tokenId;
+  // res.status(200).send({path, tokenId})
+  const item = getItem(path, tokenId);// Pass the tokenId to getItem or use as needed
+  if(!item) {
+    res.status(404).send({ error: "Item not found" });
+    return;
+  }
   res.status(200).send({ item }); // Assuming you meant to send the item not collection
 })
 
 api.get('/item/image/:tokenId', async (req, res) => {
-  const path = await basePath(); // Assuming basePath is a function that provides the path
+  const path = await basePath(eth); // Assuming basePath is a function that provides the path
   const tokenId = req.params.tokenId;
   const item = getItem(path, tokenId); // Assuming getItem retrieves the item based on path and tokenId
 
@@ -76,7 +77,7 @@ api.get('/item/image/:tokenId', async (req, res) => {
 });
 
 api.get('/item/animation/:tokenId', async (req, res) => {
-  const path = await basePath(); // Assuming basePath is a function that provides the path
+  const path = await basePath(eth); // Assuming basePath is a function that provides the path
   const tokenId = req.params.tokenId;
   const item = getItem(path, tokenId); // Assuming getItem retrieves the item based on path and tokenId
 
@@ -108,12 +109,10 @@ api.get('/item/animation/:tokenId', async (req, res) => {
 api.post('/save-items', async (req, res) => {
   console.log("fetching and saving items")
 
-  const path = await basePath()
+  const path = await basePath(eth)
   createDir(path);
-  const collection = await fetchCollection(eth)
-  collection.map(async (item:string, index: number) => {
-    saveItem(`${path}/${index+1}.json`, item)
-  })
+  await fetchCollection(eth)
+
   res.status(200).send({ message: 'ok' });
 })
 // Version the api

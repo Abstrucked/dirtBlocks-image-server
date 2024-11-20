@@ -2,6 +2,7 @@ import hychain from "./chain";
 import abi from "./abi";
 
 import { ethers } from 'ethers';
+import config from '../utils/config';
 
 declare interface IEthereumClient {
   provider: ethers.JsonRpcProvider | null;
@@ -17,11 +18,18 @@ class EthereumClient implements IEthereumClient {
       hychain.rpcUrl,
       hychain.chainId
     )
-    if(!process.env.CONTRACT_ADDRESS) {
-      throw new Error("Missing contract address, check your environment");
-    }
-    this.contract = new ethers.Contract(process.env.CONTRACT_ADDRESS, abi, this.provider);
+
+
+    const contractAddress: string =
+      !!process.env.CONTRACT_ADDRESS ? process.env.CONTRACT_ADDRESS as string : config.web3.contractAddress as string;
+
+    if(!ethers.isAddress(contractAddress))
+      throw new Error("Invalid contract address");
+
+    this.contract = new ethers.Contract(contractAddress, abi, this.provider);
+
   }
+
 
   async name(): Promise<string> {
     return await this.contract.name();

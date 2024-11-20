@@ -1,12 +1,14 @@
 import EthereumClient from '../web3/ethereumClient';
+import {saveItem, basePath} from './files';
 
 export default async function fetchCollection(
   eth: EthereumClient,
   ): Promise<string[]> {
-  let collection: Array<Promise<string>> = [];
+  const path = await basePath(eth)
+  let collection: Array<string> = [];
   const supply: number = await eth.totalSupply();
   for(let i: number = 1; i <= supply; i++) {
-    collection.push(eth.tokenJSON(i))
+    saveItem([path, `${i}.json`].join('/'), await eth.tokenJSON(i))
   }
-  return Promise.all(collection);
+  return collection
 }

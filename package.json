@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "nodemon src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "save-collection": "node dist/save-collection.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
