@@ -6,8 +6,8 @@ if (process.env.NODE_ENV !== 'production') {
 // call after config() to access the env variables
 import { app } from './api';
 
-const port = process.env.PORT || 3333;
+const port = parseInt(process.env.PORT) || 3333;
 
-app.listen(port, () =>
+app.listen(port, "::", () =>
   console.log(`API available on http://localhost:${port}`)
 );
